@@ -40,9 +40,11 @@
 
                     <div class="form-group">
                         <label asp-for="Message"></label>
-                        <textarea asp-for="Message" class="form-control"></textarea>
+                        <textarea asp-for="Message" class="form-control" maxlength="250" id="messageTextarea"></textarea>
                         <span asp-validation-for="Message" class="text-danger"></span>
+                        <span id="charLimitMessage" class="text-warning" style="display: none;">Message cannot be more than 250 characters.</span>
                     </div>
+
 
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -82,6 +84,16 @@
 </section>
 
 @section Scripts {
+        const textarea = document.getElementById('messageTextarea');
+        const charLimitMessage = document.getElementById('charLimitMessage');
+
+        textarea.addEventListener('input', function () {
+            if (textarea.value.length > 250) {
+                charLimitMessage.style.display = 'inline';
+            } else {
+                charLimitMessage.style.display = 'none';
+            }
+        });
     <partial name="_ValidationScriptsPartial" />
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
 }

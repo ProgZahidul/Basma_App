@@ -1,6 +1,7 @@
 ﻿
     using System.Collections.Generic;
-    using Microsoft.EntityFrameworkCore;
+using Basma_App.Models;
+using Microsoft.EntityFrameworkCore;
 
     public class ApplicationDbContext : DbContext
     {
@@ -10,6 +11,7 @@
         }
 
         public DbSet<ContactViewModel> Contacts { get; set; }
-    }
+        public DbSet<AppUser> AppUsers { get; set; }
+}
 
 

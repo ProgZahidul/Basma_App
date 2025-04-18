@@ -1,46 +1,52 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace Basma_App.Controllers
 {
     public class AccountController : Controller
     {
-        [HttpGet]
-        public IActionResult Login()
+        private readonly ApplicationDbContext _context;
+
+        public AccountController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
         }
+
+        [HttpGet]
+        public IActionResult Login() => View();
 
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-            // Hardcoded credentials
-            if (username == "admin" && password == "1234")
+            var user = _context.AppUsers
+                .FirstOrDefault(u => u.Username == username && u.Password == password);
+
+            if (user == null)
             {
-                var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, username)
-            };
-
-                var identity = new ClaimsIdentity(claims, "MyCookieAuth");
-                var principal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync("MyCookieAuth", principal);
-
-                return RedirectToAction("Index", "Home");
+                ViewBag.Error = "Invalid credentials";
+                return View();
             }
 
-            ViewBag.Error = "Invalid credentials";
-            return View();
+            var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.Username)
+        };
+
+            var identity = new ClaimsIdentity(claims, "CustomScheme");
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync("CustomScheme", principal);
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync("MyCookieAuth");
+            await HttpContext.SignOutAsync("CustomScheme");
             return RedirectToAction("Login");
         }
-
     }
 }

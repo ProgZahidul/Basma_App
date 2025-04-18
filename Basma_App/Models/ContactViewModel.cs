@@ -17,5 +17,6 @@ public class ContactViewModel
     public string Email { get; set; }
 
     [Required]
+    [MaxLength(250, ErrorMessage = "Message cannot be more than 250 characters.")]
     public string Message { get; set; }
 }

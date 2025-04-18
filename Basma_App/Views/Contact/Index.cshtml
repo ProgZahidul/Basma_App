@@ -1,0 +1,85 @@
+﻿@model IEnumerable<ContactViewModel>
+
+@{
+    ViewData["Title"] = "Contact List";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
+
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var contact in Model)
+                {
+                    <tr>
+                        <td>@contact.Name</td>
+                        <td>@contact.PhoneNumber</td>
+                        <td>@contact.Email</td>
+                        <td>@contact.Message</td>
+                        <td>
+                            <div class="d-flex flex-column flex-sm-row gap-2">
+                                <a asp-action="Details" asp-route-id="@contact.Id" class="btn btn-info btn-sm">View</a>
+
+                                <button type="button"
+                                        class="btn btn-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteConfirmationModal"
+                                        data-contact-id="@contact.Id"
+                                        data-contact-name="@contact.Name">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="deleteForm" method="post" asp-action="Delete" asp-controller="Contact">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete the message from <strong><span id="contactName"></span></strong>?
+                    <input type="hidden" id="contactId" name="id" />
+                </div>
+                <div class="modal-footer flex-column flex-sm-row">
+                    <button type="submit" class="btn btn-danger w-100 mb-2 mb-sm-0 me-sm-2">Delete</button>
+                    <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const deleteModal = document.getElementById('deleteConfirmationModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const contactId = button.getAttribute('data-contact-id');
+            const contactName = button.getAttribute('data-contact-name');
+
+            document.getElementById('contactId').value = contactId;
+            document.getElementById('contactName').textContent = contactName;
+        });
+    </script>
+}
