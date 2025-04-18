@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "About";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+
+<!-- about section -->
+<section class="about_section layout_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-md-6">
+                <div class="detail-box">
+                    <h2>About us</h2>
+                    <p>
+                        BASMA CONTRACTING COMPANY
+                        (Specialists in Operation & Cleaning Services)
+
+                        Basma Contracting Company is a trusted name in the cleaning industry, renowned for delivering comprehensive, end-to-end cleaning and facility management solutions. With a strong focus on quality, reliability, and customer satisfaction, we transform our clients' expectations into tangible results — making cleanliness a visible reality.
+
+                        With over 15 years of experience, our company has proudly served a wide range of clients, including corporate offices, government establishments, malls, factories, commercial shops, and various other facilities. Our deep understanding of diverse cleaning requirements enables us to provide tailored solutions that meet the highest industry standards.
+
+                        We are always ready to extend our expertise and services to new clients and ensure that you experience the true essence of professional CLEANING. Whether the project is large or small, Basma Contracting Company guarantees the same level of excellence, commitment, and professionalism.
+
+                        We look forward to partnering with you and delivering an environment that is not only clean but also healthy, safe, and inviting.
+                    </p>
+                    @if (!(currentController == "Home" && currentAction == "About"))
+                    {
+                        <div class="btn-box">
+                            <a href="@Url.Action("About", "Home")">Read More</a>
+                        </div>
+                    }
+                    
+                </div>
+            </div>
+            <div class="col-lg-7 col-md-6">
+
+                <div class="img-box">
+                    <img src="~/images/about.jpg" alt="About Image">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- end about section -->
